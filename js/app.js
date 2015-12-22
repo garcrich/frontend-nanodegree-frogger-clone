@@ -1,21 +1,29 @@
+//Constants labeled as var for browser compatibility
+var BUGSTART = -100;
+var BUGEND = 550;
+var BOARDEND = 0;
+
 var Enemy = function() {
     //sets initial run of Enemy
-    this.x = -100;
-    this.yRange = [211, 129, 47];
-    this.y = this.yRange[Math.floor(Math.random() * 3)];
-    this.speed = 150 * Math.random() + 100; //,200,300;
-
-    this.sprite = 'images/enemy-bug.png';
+    this.bugSpawn();
 };
 
 Enemy.prototype.update = function(dt) {
+   "use strict";
     //repeats initial run
     this.x += this.speed * dt;
-    if (this.x > 550) {
-        this.x = -100;
-        this.speed = 100 * Math.floor(Math.random() * 3) + 100;
-        this.y = this.yRange[Math.floor(Math.random() * 3)];
+    if (this.x > BUGEND) {
+        this.bugSpawn();
     }
+};
+
+Enemy.prototype.bugSpawn = function() {
+    "use strict"
+    this.x = BUGSTART;
+    this.yRange = [211, 129, 47];
+    this.y = this.yRange[Math.floor(Math.random() * 3)];
+    this.speed = 150 * Math.random() + 100;
+    this.sprite = 'images/enemy-bug.png';
 };
 
 Enemy.prototype.render = function() {
@@ -23,32 +31,41 @@ Enemy.prototype.render = function() {
 };
 
 var player = function() {
+    "use strict";
     //starting location
-    this.x = 205;
-    this.y = 375;
+    this.playerSpawn();
 
-    this.sprite = 'images/char-boy.png';
 };
 
-player.prototype.reset = function() {
+
+player.prototype.playerSpawn = function() {
+    "use strict";
     //fall back to starting location
     this.x = 205;
     this.y = 375;
+    this.sprite = 'images/char-boy.png';
 };
 
-//code from https://github.com/walesmd/uda-frogger/blob/master/app.js
 player.prototype.update = function() {
+    "use strict";
     //simply executes checkCollisions function
+    this.difficultyIncrease();
     this.checkCollisions();
 };
 
-player.prototype.checkCollisions = function() {
-    if (this.y <= -0) {
-        this.reset();
-    } else if (this.y >= 40 && this.y <= 220) {
-        var self = this;
-        // player is on road rows, check collisions
+player.prototype.difficultyIncrease = function() {
+    "use strict";
+    if (this.y <= BOARDEND) {
+        //add additional enemy to increase difficulty
+        allEnemies.push(new Enemy());
+        this.playerSpawn();
+    }
+};
 
+player.prototype.checkCollisions = function() {
+    if (this.y >= 40 && this.y <= 220) {
+        // player is on road rows, check collisions
+        var self = this;
 
         //code modified from https://github.com/walesmd/uda-frogger/blob/master/app.js
         // loop through each bug
@@ -57,8 +74,8 @@ player.prototype.checkCollisions = function() {
             if (bug.y == self.y) {
                 // is the bug on the player?
                 //code modified to wider radius for more challenging play
-                if (bug.x >= player.x - 40 && bug.x <= player.x + 40) {
-                    self.reset();
+                if (bug.x >= self.x - 40 && bug.x <= self.x + 40) {
+                    self.playerSpawn();
                 }
             }
         });
@@ -98,13 +115,23 @@ player.prototype.render = function() {
 };
 
 // Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
+// Place all enemy objects in an array called allEnemies\
+
+//set amount of enemies
+var enemyCount = 3;
+
+//array to hold enemies
+var allEnemies = [];
+
+//loops through enemies var i set to 1 to make enemyCount = number typed
 
 
+for (var i = 1; i <= enemyCount; i++) {
+    //creates new Enemy
+    "use strict";
+    allEnemies.push(new Enemy());
+}
 
-//create three enemies using the new operator
-var allEnemies = [Bug1 = new Enemy(), Bug2 = new Enemy(), Bug3 = new Enemy()];
-// Place the player object in a variable called player
 
 //create player useing the new operator
 var player = new player();
