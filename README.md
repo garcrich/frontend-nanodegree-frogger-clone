@@ -7,9 +7,11 @@ The objective of this project was to teach students how to use object-oriented p
 
 A pre-existing game engine was provided. All student contributions were done directly in the app.js file. 
 
+
 ####How to Play
 
 Players can use a keyboard's directional keys to move the player. Once the player reaches the water the game will reset.
+
 
 ######Udacity's notes for students
 
