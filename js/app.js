@@ -2,11 +2,13 @@
 var BUGSTART = -100;
 var BUGEND = 550;
 var BOARDEND = 0;
+var X_TRAVEL = 101;
+var Y_TRAVEL = 82;
 
 var Enemy = function() {
     //sets initial run of Enemy
     this.bugSpawn();
-};
+}
 
 Enemy.prototype.update = function(dt) {
    "use strict";
@@ -14,55 +16,55 @@ Enemy.prototype.update = function(dt) {
     this.x += this.speed * dt;
     if (this.x > BUGEND) {
         this.bugSpawn();
-    }
-};
+    };
+}
 
 Enemy.prototype.bugSpawn = function() {
-    "use strict"
+    "use strict";
     this.x = BUGSTART;
     this.yRange = [211, 129, 47];
     this.y = this.yRange[Math.floor(Math.random() * 3)];
     this.speed = 150 * Math.random() + 100;
     this.sprite = 'images/enemy-bug.png';
-};
+}
 
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+}
 
-var player = function() {
+var Player = function() {
     "use strict";
     //starting location
     this.playerSpawn();
 
-};
+}
 
 
-player.prototype.playerSpawn = function() {
+Player.prototype.playerSpawn = function() {
     "use strict";
     //fall back to starting location
     this.x = 205;
     this.y = 375;
     this.sprite = 'images/char-boy.png';
-};
+}
 
-player.prototype.update = function() {
+Player.prototype.update = function() {
     "use strict";
     //simply executes checkCollisions function
     this.difficultyIncrease();
     this.checkCollisions();
-};
+}
 
-player.prototype.difficultyIncrease = function() {
+Player.prototype.difficultyIncrease = function() {
     "use strict";
     if (this.y <= BOARDEND) {
         //add additional enemy to increase difficulty
         allEnemies.push(new Enemy());
         this.playerSpawn();
-    }
-};
+    };
+}
 
-player.prototype.checkCollisions = function() {
+Player.prototype.checkCollisions = function() {
     if (this.y >= 40 && this.y <= 220) {
         // player is on road rows, check collisions
         var self = this;
@@ -76,25 +78,26 @@ player.prototype.checkCollisions = function() {
                 //code modified to wider radius for more challenging play
                 if (bug.x >= self.x - 40 && bug.x <= self.x + 40) {
                     self.playerSpawn();
-                }
-            }
+                };
+            };
         });
-    }
-};
+    };
+}
 
-player.prototype.handleInput = function(keyup) {
+Player.prototype.handleInput = function(keyup) {
 //direct player with directional buttons
 
     if (keyup == 'left' && this.x >= 10) {
-        this.x -= 101;
+        this.x -= X_TRAVEL;
     } else if (keyup == 'right' && this.x <= 400) {
-        this.x += 101;
+        this.x += X_TRAVEL;
     } else if (keyup == 'up') {
         this.y -= 82;
     } else if (keyup == 'down' && this.y <= 370) {
         this.y += 82;
-    }
-};
+    };
+}
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -110,7 +113,7 @@ document.addEventListener('keyup', function(event) {
 });
 
 // Draw the enemy on the screen, required method for game
-player.prototype.render = function() {
+Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -128,10 +131,9 @@ var allEnemies = [];
 
 for (var i = 1; i <= enemyCount; i++) {
     //creates new Enemy
-    "use strict";
     allEnemies.push(new Enemy());
 }
 
 
 //create player useing the new operator
-var player = new player();
+var player = new Player();
