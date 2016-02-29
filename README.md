@@ -9,7 +9,8 @@ A pre-existing game engine was provided. All student contributions were done dir
 
 ### How to  Run the Program
 
-Download the repository. Next, click on 'index.html' file. 
+click the link below:
+http://garcrich.github.io/frontend-nanodegree-frogger-clone
 
 #### Objective
 
